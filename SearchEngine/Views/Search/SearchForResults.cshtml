@@ -1,0 +1,25 @@
+@model IEnumerable<SearchEngine.Models.SearchResult>
+@if (Model != null)
+{
+    if (Model.Any())
+    {
+    <h2>Результаты поиска:</h2>
+        <ul style="margin-left: 0;padding-left: 0;">
+            @foreach (var result in Model)
+            {
+                <li style="list-style-type: none;padding-bottom: 10px;background-color: aliceblue;">
+                    <div>
+                        <a href="@result.Link">
+                            <h3 style="margin-bottom: 0;padding-bottom: 0">@result.Header</h3><br/>
+                        </a>
+                        <span>@result.ResultText</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+        {
+            <h2>Результатов по запросу @ViewData["searchString"] не найдено</h2>
+        }
+}
