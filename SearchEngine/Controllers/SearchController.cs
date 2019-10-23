@@ -24,7 +24,6 @@ namespace SearchEngine.Controllers
         public async Task<ActionResult> Search(string searchString)
         {
             var results = await _service.SearchForResults(searchString);
-            ViewData["searchString"] = searchString;
             return PartialView("SearchForResults", results);
         }
         public IActionResult FindResults()

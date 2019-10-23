@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using AngleSharp;
-using AngleSharp.Dom;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using HtmlAgilityPack;
 using SearchEngine.Models;
 
 namespace SearchEngine.Searchers
@@ -16,13 +16,16 @@ namespace SearchEngine.Searchers
             return Address + searchString.Trim().Replace("+","%2B").Replace(" ", "+");
         }
 
-        public List<SearchResult> SearchResults(IDocument resultFromSearcher)
+        public List<SearchResult> SearchResults(string resultFromSearcher)
         {
-            var elementsList = resultFromSearcher.QuerySelectorAll("div.rc");
-            return elementsList.Take(10).Select(ResultFromElement).Where(m => m != null).ToList();
+            var pageDocument = new HtmlDocument();
+            pageDocument.LoadHtml(resultFromSearcher);
+            var liElements = pageDocument.DocumentNode.SelectNodes(".//div[@class='g']");
+            //var elementsList = resultFromSearcher.QuerySelectorAll("div.rc");
+            return null; //elementsList.Take(10).Select(ResultFromElement).Where(m => m != null).ToList();
         }
 
-        public static SearchResult ResultFromElement(IElement div)
+        /*public static SearchResult ResultFromElement(IElement div)
         {
             try
             {
@@ -36,7 +39,7 @@ namespace SearchEngine.Searchers
             {
                 return null;
             }
-        }
+        }*/
 
         private static string DeleteExtraSpanWithDate(string text)
         {

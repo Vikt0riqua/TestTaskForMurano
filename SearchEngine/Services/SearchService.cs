@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
-using AngleSharp;
-using AngleSharp.Dom;
 using SearchEngine.Models;
 using SearchEngine.Searchers;
 
@@ -11,7 +13,6 @@ namespace SearchEngine.Services
     public class SearchService
     {
         private readonly ResultsStorage _resultsStorage;
-        private readonly IBrowsingContext _context;
         private static readonly Dictionary<int, ISearcher> BrowserList = new Dictionary<int, ISearcher>
         {
             {1, new YandexSearcher()},
@@ -19,12 +20,12 @@ namespace SearchEngine.Services
             {3, new BingSearcher()},
         };
 
+        private static readonly HttpClient Client = new HttpClient();
+
 
         public SearchService(ResultsStorage resultsStorage)
         {
             _resultsStorage = resultsStorage;
-            var config = new Configuration().WithDefaultLoader();
-            _context = BrowsingContext.New(config);
         }
 
         public async Task<List<SearchResult>> SearchForResults(string searchString)
@@ -35,17 +36,30 @@ namespace SearchEngine.Services
             return resultsList;
         }
 
-        private async Task<(int index, IDocument document)> Search(string searchString)
+        private async Task<(int index, string document)> Search(string searchString)
         {
             var tasks = BrowserList.Select(m => GetTuple(m, searchString)).ToArray();
+            //var tasks = BrowserList.Select(m => get_http(m.Value.CreateLinkForSearch(searchString))).ToList();
             var firstTask = await Task.WhenAny(tasks);
             return firstTask.Result;
         }
 
-        private async Task<(int index, IDocument document)> GetTuple(KeyValuePair<int, ISearcher> browser, string searchString)
+        private async Task<(int index, string document)> GetTuple(KeyValuePair<int, ISearcher> browser, string searchString)
         {
-            var res = await _context.OpenAsync(browser.Value.CreateLinkForSearch(searchString));
+            var res = await GetAsync(browser.Value.CreateLinkForSearch(searchString));
+            if (browser.Key == 2) await Task.Delay(500);
             return (browser.Key, res);
+        }
+        
+        public async Task<string> GetAsync(string uri)
+        {
+            string resultHtml;
+            using (HttpResponseMessage response = await Client.GetAsync(uri))
+            using (HttpContent content = response.Content)
+            {
+                resultHtml = await content.ReadAsStringAsync();
+            }
+            return resultHtml;
         }
     }
 }

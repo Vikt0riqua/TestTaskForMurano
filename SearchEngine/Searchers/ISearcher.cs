@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using AngleSharp;
-using AngleSharp.Dom;
 using SearchEngine.Models;
 
 namespace SearchEngine.Searchers
@@ -9,7 +7,7 @@ namespace SearchEngine.Searchers
     {
         string CreateLinkForSearch(string searchString);
         
-        List<SearchResult> SearchResults(IDocument resultFromSearcher);
+        List<SearchResult> SearchResults(string resultFromSearcher);
 
     }
 }
