@@ -1,19 +1,18 @@
 ﻿using System.Threading.Tasks;
+using BL.Services;
 using Microsoft.AspNetCore.Mvc;
-using SearchEngine.Services;
 
-namespace SearchEngine.Controllers
+namespace Web.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly SearchService _service;
-        private readonly ResultsStorage _resultsStorage;
+        private readonly SearchEngineService _searchEngineService;
 
-        public SearchController(ResultsStorage resultsStorage, SearchService service)
+        public SearchController(SearchEngineService searchEngineService)
         {
-            _resultsStorage = resultsStorage;
-            _service = service;
+            _searchEngineService = searchEngineService;
         }
+
         public IActionResult Index()
         {
             ViewData["actionUrl"] = Url.Action("Search", "Search");
@@ -23,20 +22,18 @@ namespace SearchEngine.Controllers
         [HttpGet]
         public async Task<ActionResult> Search(string searchString)
         {
-            var results = await _service.SearchForResults(searchString);
+            var results = await _searchEngineService.Execute(searchString);
             return PartialView("SearchForResults", results);
         }
         public IActionResult FindResults()
         {
-            ViewData["actionUrl"] = Url.Action("Find", "Search");
             return View();
         }
         
         [HttpGet]
         public async Task<ActionResult> Find(string searchString)
         {
-            var results = await _resultsStorage.FindResults(searchString);
-            ViewData["searchString"] = searchString;
+            var results = await _searchEngineService.ExecuteLocalSearch(searchString);
             return PartialView("SearchForResults", results);
         }
         

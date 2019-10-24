@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SearchEngine.Models
+namespace DA.Models
 {
     public class SearchResult
     {
@@ -11,7 +11,6 @@ namespace SearchEngine.Models
         public string Header { get; set; }
         [StringLength(450)]
         public string Link { get; set; }
-        [StringLength(450)]
         public string ResultText { get; set; }
     }
     

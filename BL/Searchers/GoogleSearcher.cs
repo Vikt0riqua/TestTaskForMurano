@@ -1,25 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
-using System.Xml.XPath;
+using DA.Models;
 using HtmlAgilityPack;
-using SearchEngine.Models;
 
-namespace SearchEngine.Searchers
+namespace BL.Searchers
 {
     public class GoogleSearcher : ISearcher
     {
         private const string Address = "https://www.google.ru/search?q=";
 
-        public string CreateLinkForSearch(string searchString)
+        public string GetAddress()
         {
-            return Address + searchString.Trim().Replace("+","%2B").Replace(" ", "+");
+            return Address;
         }
-
-        public List<SearchResult> SearchResults(string resultFromSearcher)
+        public List<SearchResult> SearchResults(HtmlDocument pageDocument)
         {
-            var pageDocument = new HtmlDocument();
-            pageDocument.LoadHtml(resultFromSearcher);
             var liElements = pageDocument.DocumentNode.SelectNodes(".//div[@class='g']");
             //var elementsList = resultFromSearcher.QuerySelectorAll("div.rc");
             return null; //elementsList.Take(10).Select(ResultFromElement).Where(m => m != null).ToList();

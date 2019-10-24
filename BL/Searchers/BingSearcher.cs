@@ -1,27 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
-using System.Xml.XPath;
+using DA.Models;
 using HtmlAgilityPack;
-using SearchEngine.Models;
 
-namespace SearchEngine.Searchers
+namespace BL.Searchers
 {
     public class BingSearcher : ISearcher
     {
         private const string Address = "https://www.bing.com/search?q=";
         private const string xpath = ".//ol//li[@class='b_algo']";
-
-        public string CreateLinkForSearch(string searchString)
+        
+        public string GetAddress()
         {
-            return Address + searchString.Trim().Replace("+","%2B").Replace(" ", "+");
+            return Address;
         }
-
-        public List<SearchResult> SearchResults(string resultFromSearcher)
+        public List<SearchResult> SearchResults(HtmlDocument pageDocument)
         {
-            var pageDocument = new HtmlDocument();
-            pageDocument.LoadHtml(resultFromSearcher);
             var liElements = pageDocument.DocumentNode.SelectNodes(xpath).Where(n => n.ChildNodes.Count >= 2).Take(10);
             return liElements.Select(ResultFromLiElement).Where(m => m != null).ToList();
         }

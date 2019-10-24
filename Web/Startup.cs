@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using BL.Services;
+using DA.Contexts;
+using DA.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SearchEngine.Models;
-using Microsoft.EntityFrameworkCore;
-using SearchEngine.Services;
 
-namespace SearchEngine
+namespace Web
 {
     public class Startup
     {
@@ -21,7 +22,9 @@ namespace SearchEngine
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<SearchResultContext>(options => options.UseSqlServer(connection));
             services.AddScoped<SearchService>();
-            services.AddScoped<ResultsStorage>();
+            services.AddScoped<ResultsStorageService>();
+            services.AddScoped<SearchResultRepository>();
+            services.AddScoped<SearchEngineService>();
             services.AddMvc();
         }
 

@@ -1,6 +1,7 @@
+using DA.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace SearchEngine.Models
+namespace DA.Contexts
 {
     public class SearchResultContext: DbContext
     {
@@ -14,7 +15,7 @@ namespace SearchEngine.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SearchResult>().HasIndex(u => new { u.Header, u.Link, u.ResultText}).IsUnique();
+            modelBuilder.Entity<SearchResult>().HasIndex(u => new { u.Header, u.Link}).IsUnique();
         }
     }
 }
