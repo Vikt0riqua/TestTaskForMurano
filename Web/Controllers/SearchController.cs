@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BL.Services;
+using DA.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -7,7 +10,6 @@ namespace Web.Controllers
     public class SearchController : Controller
     {
         private readonly SearchEngineService _searchEngineService;
-
         public SearchController(SearchEngineService searchEngineService)
         {
             _searchEngineService = searchEngineService;
@@ -15,28 +17,45 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
-            ViewData["actionUrl"] = Url.Action("Search", "Search");
             return View();
         }
-        
+
         [HttpGet]
-        public async Task<ActionResult> Search(string searchString)
+        public async Task<ActionResult> Search(string searchString, int page = 1)
         {
-            var results = await _searchEngineService.Execute(searchString);
-            return PartialView("SearchForResults", results);
+            ViewData["searchString"] = searchString;
+            ViewData["actionString"] = "Search";
+            const int pageSize = 10;
+            var findResults = await _searchEngineService.Execute(searchString);
+            if (findResults == null) return PartialView("SearchForResults", null);
+            var pageViewModel = new PageViewModel(findResults.Count, page, pageSize);
+            var viewModel = new ResultsViewModel
+            {
+                PageViewModel = pageViewModel,
+                SearchResults = findResults.Skip((page - 1) * pageSize).Take(pageSize)
+            };
+            return PartialView("SearchForResults", viewModel);
         }
         public IActionResult FindResults()
         {
             return View();
         }
-        
+
         [HttpGet]
-        public async Task<ActionResult> Find(string searchString)
+        public async Task<ActionResult> Find(string searchString, int page = 1)
         {
-            var results = await _searchEngineService.ExecuteLocalSearch(searchString);
-            return PartialView("SearchForResults", results);
+            ViewData["searchString"] = searchString;
+            ViewData["actionString"] = "Find";
+            const int pageSize = 10;
+            var findResults = await _searchEngineService.ExecuteLocalSearch(searchString);
+            if(findResults == null) return PartialView("SearchForResults", null);
+            var pageViewModel = new PageViewModel(findResults.Count, page, pageSize);
+            var viewModel = new ResultsViewModel
+            {
+                PageViewModel = pageViewModel,
+                SearchResults = findResults.Skip((page - 1) * pageSize).Take(pageSize)
+            };
+            return PartialView("SearchForResults", viewModel);
         }
-        
-        
     }
 }

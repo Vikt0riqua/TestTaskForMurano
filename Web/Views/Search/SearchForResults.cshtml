@@ -1,25 +1,46 @@
-@model IEnumerable<DA.Models.SearchResult>
-@if (Model != null)
-{
-    if (Model.Any())
+@using DA.Models
+@model ResultsViewModel
+@{
+    var searchString = ViewData["searchString"].ToString();
+    var action = ViewData["actionString"].ToString();
+}
+<body>
+    @if (!string.IsNullOrEmpty(searchString))
     {
-    <h2>Результаты поиска:</h2>
-        <ul style="margin-left: 0;padding-left: 0;">
-            @foreach (var result in Model)
-            {
-                <li style="list-style-type: none;padding-bottom: 10px;background-color: aliceblue;">
-                    <div>
-                        <a href="@result.Link">
-                            <h3 style="margin-bottom: 0;padding-bottom: 0">@result.Header</h3><br/>
-                        </a>
-                        <span>@result.ResultText</span>
-                    </div>
-                </li>
-            }
-        </ul>
+        if (Model != null && Model.SearchResults.Any())
+        {
+            <h2>Результаты поиска:</h2>
+            <ul class='ul-class'>
+                @foreach (var result in Model.SearchResults)
+                {
+                    <li class="result-container">
+                        <div>
+                            <a href="@result.Link">
+                                <h3 class="h3-header">@result.Header</h3><br />
+                            </a>
+                            <span>@result.ResultText</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <div class="btn-group">
+                @if (Model.PageViewModel.HasPreviousPage)
+                {
+                    <button class="btn_submit" type="button" id="nextButton" onclick="onClickSearchButton('@Url.Action(action,"Search")', '@searchString', @(Model.PageViewModel.PageNumber - 1) )">&larr;Назад</button>
+                }
+                @if (Model.PageViewModel.HasNextPage)
+                {
+                    <button class="btn_submit" type="button" id="nextButton" onclick="onClickSearchButton('@Url.Action(action,"Search")', '@searchString', @(Model.PageViewModel.PageNumber + 1) )">Вперед&rarr;</button>
+                }
+            </div>
+        }
+        else
+        {
+            <h2>Результатов по запросу "@searchString" не найдено</h2>
+        }
     }
     else
-        {
-            <h2>Результатов по запросу @ViewData["searchString"] не найдено</h2>
-        }
-}
+    {
+        <h2>Задан пустой поисковый запрос</h2>
+    }
+</body>

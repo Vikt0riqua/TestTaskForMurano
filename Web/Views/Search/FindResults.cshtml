@@ -1,34 +1,18 @@
 @{
     Layout = "_Layout";
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
-jQuery(function($) {
-	 	$('#searchButton').click(function() {
-	 	    var searchString = $('#searchText').val();
-	 		$.ajax({
-                    url: '@Url.Action("Find","Search")',
-                    type: 'GET',
-                    data: { searchString: searchString },
-                    success: function(results) {
-                        $("#containerForResults").empty().append(results);
-                    }
-                });
-	 	})
-})
-</script>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Поиск по базе</title>
 </head>
 <body>
-<h1>Поисковик(offline)&nbsp;
-    <input style="width: 600px;"  name="searchText" id="searchText" type="text">
-    <button class="btn" type="submit" id="searchButton">Найти</button>
-</h1>
-<div id="containerForResults">
-    @Html.Partial("SearchForResults", null);
-</div>
+    <h1 class="h-searcher">
+        Поисковик(offline)&nbsp;
+        <input class="inputSearchText" name="searchText" id="searchText" type="text">
+        <button class="btn_submit" type="submit" id="searchButton" onclick="onClickSearchButton('@Url.Action("Find","Search")', '', 1)">Найти</button>
+    </h1>
+    <div id="containerForResults">
+    </div>
 </body>
 </html>

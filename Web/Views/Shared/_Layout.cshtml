@@ -1,32 +1,33 @@
 ﻿<!DOCTYPE html>
 <html>
+<head>
+    <title></title>
+    <link href="~/CSS/StyleSheet.css" rel="stylesheet" />
+    <script src="~/js/FuncScripts.js" type="text/javascript"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+            crossorigin="anonymous"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+    </script>
+</head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header" style="display: inline-block;background:cornflowerblue;color: #fff; width: 100%">
-            <p style="font-size: 30px; margin: 0; padding: 10px 1em;display: inline-block">Поисковик</p>
-            <a style="font-size: 20px; margin: 0; padding: 10px 1em;display: inline-block" asp-controller="Search" asp-action="Index">Поиск в сети</a>
-            <a style="font-size: 20px; margin: 0; padding: 10px 1em;display: inline-block" asp-controller="Search" asp-action="FindResults">Поиск по базе</a>
+    <nav>
+        <div>
+            <div class="headerElement">
+                <p class="p-header">Поисковик</p>
+                <a class="a-searcher" asp-controller="Search" asp-action="Index">Поиск в сети</a>
+                <a class="a-searcher" asp-controller="Search" asp-action="FindResults">Поиск по базе</a>
+            </div>
         </div>
+    </nav>
+
+    <div>
+        @RenderBody()
     </div>
-</nav>
-
-<div class="container body-content">
-    @RenderBody()
-</div>
-
-<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-        asp-fallback-test="window.jQuery"
-        crossorigin="anonymous"
-        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-        asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-        asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-        crossorigin="anonymous"
-        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
-        </script>
-@RenderSection("Scripts", required: false)
 </body>
 </html>

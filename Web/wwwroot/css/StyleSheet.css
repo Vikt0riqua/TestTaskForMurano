@@ -1,0 +1,60 @@
+﻿.p-header {
+    font-size: 30px;
+    margin: 0;
+    padding: 10px 1em;
+    display: inline-block
+}
+
+.a-searcher {
+    font-size: 20px;
+    margin: 0;
+    padding: 10px 1em;
+    display: inline-block
+}
+
+.h-searcher {
+    display: table;
+}
+
+.inputSearchText {
+    width: 600px;
+    height: 20px;
+}
+
+.btn_submit {
+    color: white;
+    background-color: cornflowerblue;
+    border-color: dodgerblue;
+    text-align: center;
+    padding: 4px 10px;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+
+.headerElement {
+    display: inline-block;
+    background: cornflowerblue;
+    color: #fff;
+    width: 100%
+}
+
+.result-container {
+    list-style-type: none;
+    padding-bottom: 10px;
+    background-color: aliceblue;
+}
+
+.h3-header {
+    margin-bottom: 0;
+    padding-bottom: 0
+}
+
+.ul-class {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.btn-group {
+    display: inline-block;
+    vertical-align: middle;
+}

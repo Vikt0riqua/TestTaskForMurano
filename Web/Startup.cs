@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Web.Middlewares;
 
 namespace Web
 {
@@ -28,15 +30,16 @@ namespace Web
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseMiddleware<LoggingMiddleware>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Search}/{action=Index}/{id?}");
+                    template: "{controller=Search}/{action=Index}");
             });
         }
     }
